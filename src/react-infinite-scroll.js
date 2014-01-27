@@ -1,10 +1,3 @@
-function topPosition(domElt) {
-  if (!domElt) {
-    return 0;
-  }
-  return domElt.offsetTop + topPosition(domElt.offsetParent);
-}
-
 module.exports = function (React) {
   if (React.addons && React.addons.InfiniteScroll) {
     return React.addons.InfiniteScroll;
@@ -17,28 +10,42 @@ module.exports = function (React) {
         hasMore: false,
         loadMore: function () {},
         threshold: 250,
-        loader: InfiniteScroll._defaultLoader
+        loader: InfiniteScroll._defaultLoader,
+        component: React.DOM.div
       };
     },
     getInitialState: function () {
       this.pageLoaded = this.props.pageStart;
+      this.updated = true;
     },
     componentDidMount: function () {
       this.attachScrollListener();
     },
     componentDidUpdate: function () {
-      this.attachScrollListener();
+      this.updated = true;
+      if (!this.props.hasMore) {
+        this.detachScrollListener();
+      }
     },
     render: function () {
       var props = this.props;
-      return React.DOM.div(null, props.children, props.hasMore && props.loader);
+      return this.transferPropsTo(props.component({
+        pageStart: null
+      , hasMore: null
+      , loadMore: null
+      , threshold: null
+      , loader: null
+      , component: null
+      }, props.children, props.hasMore && props.loader));
     },
     scrollListener: function () {
-      var el = this.getDOMNode();
-      var scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
-      if (topPosition(el) + el.offsetHeight - scrollTop - window.innerHeight < Number(this.props.threshold)) {
+      if (!this.updated) return;
+      var coords = this.getDOMNode().getBoundingClientRect();
+      var cutoff = (window.innerHeight || document.documentElement.clientHeight) + this.props.threshold;
+
+      if ((coords.bottom >= 0 && coords.left >= 0 && coords.bottom) <= cutoff) {
+        this.updated = false;
         this.props.loadMore(this.pageLoaded += 1);
-        this.detachScrollListener();
       }
     },
     attachScrollListener: function () {
