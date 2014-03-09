@@ -17,6 +17,7 @@ module.exports = function (React) {
     getInitialState: function () {
       this.pageLoaded = this.props.pageStart;
       this.updated = true;
+      return null;
     },
     componentDidMount: function () {
       this.attachScrollListener();
