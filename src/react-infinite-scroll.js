@@ -10,7 +10,7 @@ module.exports = function (React) {
         hasMore: false,
         loadMore: function () {},
         threshold: 250,
-        loader: InfiniteScroll._defaultLoader,
+        loader: null,
         component: React.DOM.div
       };
     },
@@ -63,8 +63,5 @@ module.exports = function (React) {
       this.detachScrollListener();
     }
   });
-  InfiniteScroll.setDefaultLoader = function (loader) {
-    InfiniteScroll._defaultLoader = loader;
-  };
   return InfiniteScroll;
 };
