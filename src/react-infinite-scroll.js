@@ -27,6 +27,9 @@ module.exports = function (React) {
       if (!this.props.hasMore) {
         this.detachScrollListener();
       }
+      else {
+        this.attachScrollListener();
+      }
     },
     render: function () {
       var props = this.props;
