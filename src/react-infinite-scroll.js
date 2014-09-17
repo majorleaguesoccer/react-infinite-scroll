@@ -22,10 +22,15 @@ module.exports = function (React) {
     componentDidMount: function () {
       this.attachScrollListener();
     },
-    componentDidUpdate: function () {
+    componentDidUpdate: function (prevProps) {
       this.updated = true;
+      if (prevProps.hasMore === this.props.hasMore) return;
+
       if (!this.props.hasMore) {
         this.detachScrollListener();
+      }
+      else {
+        this.attachScrollListener();
       }
     },
     render: function () {
