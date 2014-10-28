@@ -35,14 +35,14 @@ module.exports = function (React) {
     },
     render: function () {
       var props = this.props;
-      return this.transferPropsTo(props.component({
+      return props.component(extend({}, this.props, {
         pageStart: null
       , hasMore: null
       , loadMore: null
       , threshold: null
       , loader: null
       , component: null
-      }, props.children, props.hasMore && props.loader));
+      }), props.children, props.hasMore && props.loader);
     },
     scrollListener: function () {
       if (!this.updated) return;
@@ -70,3 +70,16 @@ module.exports = function (React) {
   });
   return InfiniteScroll;
 };
+
+function extend(obj) {
+  var source, prop;
+  for (var i = 1, length = arguments.length; i < length; i++) {
+    source = arguments[i];
+    for (prop in source) {
+      if (hasOwnProperty.call(source, prop)) {
+          obj[prop] = source[prop];
+      }
+    }
+  }
+  return obj;
+}
