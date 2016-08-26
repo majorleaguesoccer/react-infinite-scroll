@@ -1,3 +1,6 @@
+# **DEPRICATED**
+This module is now depricated and will be deleted soon.
+
 React Infinite Scroll
 =====================
 
